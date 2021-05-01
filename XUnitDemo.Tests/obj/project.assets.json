@@ -4630,9 +4630,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\BlogPlan\\XUnitDemo\\XUnitDemo.Tests\\XUnitDemo.Tests.csproj",
-      "projectName": "XUnitDemo.Tests",
-      "projectPath": "E:\\BlogPlan\\XUnitDemo\\XUnitDemo.Tests\\XUnitDemo.Tests.csproj",
+      "projectUniqueName": "E:\\BlogPlan\\XUnitDemo\\XUnitDemo.Tests\\XUnitDemo.NUnitTests.csproj",
+      "projectName": "XUnitDemo.NUnitTests",
+      "projectPath": "E:\\BlogPlan\\XUnitDemo\\XUnitDemo.Tests\\XUnitDemo.NUnitTests.csproj",
       "packagesPath": "C:\\Users\\Administrator\\.nuget\\packages\\",
       "outputPath": "E:\\BlogPlan\\XUnitDemo\\XUnitDemo.Tests\\obj\\",
       "projectStyle": "PackageReference",
