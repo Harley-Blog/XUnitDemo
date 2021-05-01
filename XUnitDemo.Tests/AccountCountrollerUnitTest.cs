@@ -1,31 +1,38 @@
 using NUnit.Framework;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace XUnitDemo.Tests
 {
-    [TestFixture()]
-    public class Tests
+    [TestFixture]
+    public class AccountCountrollerUnitTest
     {
-        [SetUp]
-        public void Setup()
-        {
-        }
-
         [Test]
-        public void Test1()
+        [Category("*用户名认证的测试*")]
+        public void Auth_UserNamePwd_ReturnTrue()
         {
             Assert.Pass();
         }
 
         [Test]
-        public void TestIgnore()
+        [Category("*邮箱认证的测试*")]
+        public void Auth_EmailPwd_ReturnTrue()
         {
-            Assert.Inconclusive("这个方法不进行测试");
+            Assert.Pass();
         }
 
         [Test]
-        public void AccountCountroller_UserNamePwd_ReturnTrue()
-        { 
-            
+        [Category("*手机号认证的测试*")]
+        public void Auth_MobilePwd_ReturnTrue()
+        {
+            Assert.Pass();
+        }
+
+        [Test]
+        [Category("*手机号认证的测试*")]
+        public void Auth_MobileCode_ReturnTrue()
+        {
+            Assert.Pass();
         }
     }
 }
