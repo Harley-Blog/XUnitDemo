@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.31205.134
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XUnitDemo.WebApi", "XUnitDemo\XUnitDemo.WebApi.csproj", "{E697795D-A9AF-450C-B991-267F18E7411A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XUnitDemo.NUnitTests", "XUnitDemo.Tests\XUnitDemo.NUnitTests.csproj", "{19C5E51F-D629-4BCB-B3CE-4DECB5DE7D68}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XUnitDemo.NUnitTests", "XUnitDemo.NUnitTests\XUnitDemo.NUnitTests.csproj", "{19C5E51F-D629-4BCB-B3CE-4DECB5DE7D68}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XUnitDemo.Service", "XUnitDemo.Service\XUnitDemo.Service.csproj", "{19C2071A-2FEC-43DD-BED8-D8D551FD1DC9}"
 EndProject

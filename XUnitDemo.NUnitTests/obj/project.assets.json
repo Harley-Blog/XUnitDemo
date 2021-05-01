@@ -4630,11 +4630,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\BlogPlan\\XUnitDemo\\XUnitDemo.Tests\\XUnitDemo.NUnitTests.csproj",
+      "projectUniqueName": "E:\\BlogPlan\\XUnitDemo\\XUnitDemo.NUnitTests\\XUnitDemo.NUnitTests.csproj",
       "projectName": "XUnitDemo.NUnitTests",
-      "projectPath": "E:\\BlogPlan\\XUnitDemo\\XUnitDemo.Tests\\XUnitDemo.NUnitTests.csproj",
+      "projectPath": "E:\\BlogPlan\\XUnitDemo\\XUnitDemo.NUnitTests\\XUnitDemo.NUnitTests.csproj",
       "packagesPath": "C:\\Users\\Administrator\\.nuget\\packages\\",
-      "outputPath": "E:\\BlogPlan\\XUnitDemo\\XUnitDemo.Tests\\obj\\",
+      "outputPath": "E:\\BlogPlan\\XUnitDemo\\XUnitDemo.NUnitTests\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "D:\\Program Files\\Microsoft Visual Studio\\Shared\\NuGetPackages",

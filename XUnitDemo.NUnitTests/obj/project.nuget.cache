@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "mFirfPLEf7rMupXXNTXHffR7LofhQcb3LfZtON8AEZjeeI25O4I1enKpl1twtl+cQJYvCQRpwJR1jpLndwEHbQ==",
+  "dgSpecHash": "3BgarloUEtKfnhMRfktLGb6RW/sAZHYSkM+rs0uUEv3xJBObpMUN+Zk+mZuuGCKcTm3gFpeNdpzCWb9tFYWNEQ==",
   "success": true,
-  "projectFilePath": "E:\\BlogPlan\\XUnitDemo\\XUnitDemo.Tests\\XUnitDemo.NUnitTests.csproj",
+  "projectFilePath": "E:\\BlogPlan\\XUnitDemo\\XUnitDemo.NUnitTests\\XUnitDemo.NUnitTests.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.codecoverage\\16.5.0\\microsoft.codecoverage.16.5.0.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.csharp\\4.0.1\\microsoft.csharp.4.0.1.nupkg.sha512",
