@@ -8,7 +8,7 @@ namespace XUnitDemo.XUnitTests
         [Fact]
         public void Test1()
         {
-
+            Assert.NotNull(null);
         }
     }
 }

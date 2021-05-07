@@ -1,12 +1,16 @@
 using NUnit.Framework;
-using System.Threading;
-using System.Threading.Tasks;
+using XUnitDemo.NUnitTests.AOP;
 
 namespace XUnitDemo.Tests
 {
     [TestFixture]
-    public class AccountCountrollerUnitTest
+    [Category("*账号相关的测试*")]
+    public class AccountServiceUnitTest
     {
+        public void SetUp()
+        { }
+
+        [LogTestAction]
         [Test]
         [Category("*用户名认证的测试*")]
         public void Auth_UserNamePwd_ReturnTrue()
