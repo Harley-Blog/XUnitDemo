@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "7Octzh21uIWdoBcdBkysw2jrlCWX2ty+H1FI9YylVug66SqYsMNRz5MRI5FGwA0wRFX/eJre5fsfm1nTZi+XTw==",
+  "success": true,
+  "projectFilePath": "E:\\BlogPlan\\XUnitDemo\\app\\XUnitDemo.Service\\XUnitDemo.Service.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Administrator\\.nuget\\packages\\nlog\\4.7.9\\nlog.4.7.9.nupkg.sha512"
+  ],
+  "logs": []
+}

@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\framework\XUnitDemo.Infrastucture\XUnitDemo.Infrastucture.csproj" />
+    <ProjectReference Include="..\XUnitDemo.IService\XUnitDemo.IService.csproj" />
+  </ItemGroup>
+
+</Project>

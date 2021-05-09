@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "OrZR0LH1HGGti1UDrQEv/1o5BtREVzx6Wbeue3VU+KEZG3evzeJ+/wmYzwNeMQI7fEIWVb7+yHyWmA9HLttgww==",
+  "success": true,
+  "projectFilePath": "E:\\BlogPlan\\XUnitDemo\\framework\\XUnitDemo.Infrastucture\\XUnitDemo.Infrastucture.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Administrator\\.nuget\\packages\\nlog\\4.7.9\\nlog.4.7.9.nupkg.sha512"
+  ],
+  "logs": []
+}

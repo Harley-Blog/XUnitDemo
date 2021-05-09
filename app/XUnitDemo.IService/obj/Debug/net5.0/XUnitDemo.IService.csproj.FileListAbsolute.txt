@@ -1,0 +1,11 @@
+E:\BlogPlan\XUnitDemo\app\XUnitDemo.IService\bin\Debug\net5.0\XUnitDemo.IService.deps.json
+E:\BlogPlan\XUnitDemo\app\XUnitDemo.IService\bin\Debug\net5.0\XUnitDemo.IService.dll
+E:\BlogPlan\XUnitDemo\app\XUnitDemo.IService\bin\Debug\net5.0\ref\XUnitDemo.IService.dll
+E:\BlogPlan\XUnitDemo\app\XUnitDemo.IService\bin\Debug\net5.0\XUnitDemo.IService.pdb
+E:\BlogPlan\XUnitDemo\app\XUnitDemo.IService\obj\Debug\net5.0\XUnitDemo.IService.GeneratedMSBuildEditorConfig.editorconfig
+E:\BlogPlan\XUnitDemo\app\XUnitDemo.IService\obj\Debug\net5.0\XUnitDemo.IService.AssemblyInfoInputs.cache
+E:\BlogPlan\XUnitDemo\app\XUnitDemo.IService\obj\Debug\net5.0\XUnitDemo.IService.AssemblyInfo.cs
+E:\BlogPlan\XUnitDemo\app\XUnitDemo.IService\obj\Debug\net5.0\XUnitDemo.IService.csproj.CoreCompileInputs.cache
+E:\BlogPlan\XUnitDemo\app\XUnitDemo.IService\obj\Debug\net5.0\XUnitDemo.IService.dll
+E:\BlogPlan\XUnitDemo\app\XUnitDemo.IService\obj\Debug\net5.0\ref\XUnitDemo.IService.dll
+E:\BlogPlan\XUnitDemo\app\XUnitDemo.IService\obj\Debug\net5.0\XUnitDemo.IService.pdb

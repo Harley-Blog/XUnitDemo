@@ -1,0 +1,11 @@
+E:\BlogPlan\XUnitDemo\framework\XUnitDemo.Infrastucture\bin\Debug\netstandard2.1\SensitiveWords\Political.txt
+E:\BlogPlan\XUnitDemo\framework\XUnitDemo.Infrastucture\bin\Debug\netstandard2.1\SensitiveWords\YellowRelated.txt
+E:\BlogPlan\XUnitDemo\framework\XUnitDemo.Infrastucture\bin\Debug\netstandard2.1\XUnitDemo.Infrastucture.deps.json
+E:\BlogPlan\XUnitDemo\framework\XUnitDemo.Infrastucture\bin\Debug\netstandard2.1\XUnitDemo.Infrastucture.dll
+E:\BlogPlan\XUnitDemo\framework\XUnitDemo.Infrastucture\bin\Debug\netstandard2.1\XUnitDemo.Infrastucture.pdb
+E:\BlogPlan\XUnitDemo\framework\XUnitDemo.Infrastucture\obj\Debug\netstandard2.1\XUnitDemo.Infrastucture.csprojAssemblyReference.cache
+E:\BlogPlan\XUnitDemo\framework\XUnitDemo.Infrastucture\obj\Debug\netstandard2.1\XUnitDemo.Infrastucture.AssemblyInfoInputs.cache
+E:\BlogPlan\XUnitDemo\framework\XUnitDemo.Infrastucture\obj\Debug\netstandard2.1\XUnitDemo.Infrastucture.AssemblyInfo.cs
+E:\BlogPlan\XUnitDemo\framework\XUnitDemo.Infrastucture\obj\Debug\netstandard2.1\XUnitDemo.Infrastucture.csproj.CoreCompileInputs.cache
+E:\BlogPlan\XUnitDemo\framework\XUnitDemo.Infrastucture\obj\Debug\netstandard2.1\XUnitDemo.Infrastucture.dll
+E:\BlogPlan\XUnitDemo\framework\XUnitDemo.Infrastucture\obj\Debug\netstandard2.1\XUnitDemo.Infrastucture.pdb
