@@ -5,5 +5,6 @@ namespace XUnitDemo.IService
     public interface IBlogService
     {
         public Task<string> GetSecurityBlogAsync(string originContent);
+        public Task<bool> IsAllSensitiveListIsEffectiveAsync();
     }
 }

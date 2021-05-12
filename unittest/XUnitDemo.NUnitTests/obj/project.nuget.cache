@@ -1,12 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "+rUbHv9DyiIEVIqwFDRP7nfRAMk0H1iJJQjQsQ+wBCBhOMErVsQgVfAgTn4/0eYNk774FKRf3WJzHrcOCNlQLg==",
+  "dgSpecHash": "+X9jlhkX+SzO/yCAY0VRXqg/ip07O9sVj5SGqLq7dw5OIaW8uF8ZZxtQ84vo/gdxhSNLk3bPweUKHGApEXL5nA==",
   "success": true,
   "projectFilePath": "E:\\BlogPlan\\XUnitDemo\\unittest\\XUnitDemo.NUnitTests\\XUnitDemo.NUnitTests.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.codecoverage\\16.5.0\\microsoft.codecoverage.16.5.0.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.csharp\\4.0.1\\microsoft.csharp.4.0.1.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.dotnet.internalabstractions\\1.0.0\\microsoft.dotnet.internalabstractions.1.0.0.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\5.0.0\\microsoft.extensions.logging.abstractions.5.0.0.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.net.test.sdk\\16.5.0\\microsoft.net.test.sdk.16.5.0.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.netcore.targets\\1.1.0\\microsoft.netcore.targets.1.1.0.nupkg.sha512",

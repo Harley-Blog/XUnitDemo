@@ -4,7 +4,7 @@ namespace XUnitDemo.Infrastucture
 {
     public class LoggerHelper
     {
-        private readonly Logger _logger = null;
+        private readonly ILogger _logger = null;
         private static LoggerHelper _loggerHelper = null;
         static LoggerHelper()
         {

@@ -9,3 +9,4 @@ E:\BlogPlan\XUnitDemo\app\XUnitDemo.IService\obj\Debug\net5.0\XUnitDemo.IService
 E:\BlogPlan\XUnitDemo\app\XUnitDemo.IService\obj\Debug\net5.0\XUnitDemo.IService.dll
 E:\BlogPlan\XUnitDemo\app\XUnitDemo.IService\obj\Debug\net5.0\ref\XUnitDemo.IService.dll
 E:\BlogPlan\XUnitDemo\app\XUnitDemo.IService\obj\Debug\net5.0\XUnitDemo.IService.pdb
+E:\BlogPlan\XUnitDemo\app\XUnitDemo.IService\obj\Debug\net5.0\XUnitDemo.IService.csprojAssemblyReference.cache

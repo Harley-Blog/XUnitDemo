@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "u8ga9DQyDNmRLkaS4ZfPFsvlX6Cc7S/plaqMxfnlTnwmWfJEDkdty7g7Rm9hg76CLjJgnKAVqguBz0ooz9RVOQ==",
+  "dgSpecHash": "o3v7EZAG/nhzwjquKYzlLeFM3vh4JRbySJ4xJp0UBsqL1yXkfEI3egZ3BLT5vmIGUmdQqktWUtpZJ2wFwiBy9g==",
   "success": true,
   "projectFilePath": "E:\\BlogPlan\\XUnitDemo\\app\\XUnitDemo.IService\\XUnitDemo.IService.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\5.0.0\\microsoft.extensions.logging.abstractions.5.0.0.nupkg.sha512"
+  ],
   "logs": []
 }
