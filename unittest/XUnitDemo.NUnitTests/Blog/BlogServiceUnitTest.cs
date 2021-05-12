@@ -15,12 +15,18 @@ namespace XUnitDemo.NUnitTests.Blog
     {
         private IBlogService _blogService;
         private MockLoggerService _mockLoggerService;
+        private StubLoggerService _stubLoggerService;
+        private MockEmailService _mockEmailService;
 
         [SetUp]
         public void SetUp()
         {
-            _mockLoggerService = new MockLoggerService();
-            _blogService = new BlogService(new StubFileManager(), _mockLoggerService);
+            //_mockLoggerService = new MockLoggerService();
+            //_blogService = new BlogService(new StubFileManager(), _mockLoggerService);
+
+            _stubLoggerService = new StubLoggerService();
+            _mockEmailService = new MockEmailService();
+            _blogService = new BlogService(new StubFileManager(), _stubLoggerService, _mockEmailService);
         }
 
         [Test]
@@ -54,6 +60,23 @@ namespace XUnitDemo.NUnitTests.Blog
             string originContent = "1111 2222 3333 4444 0000 5555 为了节能环保000，为了环境安全，请使用可降解垃圾袋。";
             await _blogService.GetSecurityBlogAsync(originContent);
             Assert.AreEqual(_mockLoggerService.LastErrorMessage, $"【{originContent}】含有敏感字符","LoggerService未能正确记录错误消息");
+        }
+
+        [Test]
+        public async Task GetSecurityBlogAsync_LoggerServiceThrow_SendEmail()
+        {
+            string error = "Custom Exception";
+            _stubLoggerService.Exception = new Exception(error);
+
+            string originContent = "1111 2222 3333 4444 0000 5555 为了节能环保000，为了环境安全，请使用可降解垃圾袋。";
+            await _blogService.GetSecurityBlogAsync(originContent);
+            Assert.Multiple(() =>
+            {
+                Assert.AreEqual("Harley", _mockEmailService.To);
+                Assert.AreEqual("System", _mockEmailService.From);
+                Assert.AreEqual("LoggerService抛出异常", _mockEmailService.Subject);
+                Assert.AreEqual(error, _mockEmailService.Body);
+            });
         }
 
         [TearDown]
@@ -92,6 +115,35 @@ namespace XUnitDemo.NUnitTests.Blog
         public void LogError(string content, Exception ex)
         {
             LastErrorMessage = content;
+        }
+    }
+
+    internal class StubLoggerService : ILoggerService
+    {
+        public Exception Exception { get; set; }
+
+        public void LogError(string content, Exception ex)
+        {
+            if (Exception is not null)
+            {
+                throw Exception;
+            }
+        }
+    }
+
+    internal class MockEmailService : IEmailService
+    {
+        public string To { get; set; }
+        public string From { get; set; }
+        public string Subject { get; set; }
+        public string Body { get; set; }
+        public async Task SendEmailAsync(string to, string from, string subject, string body)
+        {
+            To = to;
+            From = from;
+            Subject = subject;
+            Body = body;
+            await Task.CompletedTask;
         }
     }
 }

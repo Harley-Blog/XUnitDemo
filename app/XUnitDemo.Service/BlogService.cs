@@ -17,6 +17,7 @@ namespace XUnitDemo.Service
     {
         private readonly IFileManager _fileManager;
         private readonly ILoggerService _loggerService;
+        private readonly IEmailService _emailService;
         private ILogger _logger;
         private static readonly List<string> _sensitiveList;
         private int _effectiveSensitiveNum;
@@ -27,10 +28,11 @@ namespace XUnitDemo.Service
             _sensitiveList = new List<string> { "Political.txt", "YellowRelated.txt" };
         }
 
-        public BlogService(IFileManager fileManager, ILoggerService loggerService)
+        public BlogService(IFileManager fileManager, ILoggerService loggerService, IEmailService emailService)
         {
             _fileManager = fileManager;
             _loggerService = loggerService;
+            _emailService = emailService;
         }
 
         #region Constructor
@@ -141,6 +143,40 @@ namespace XUnitDemo.Service
         //} 
         #endregion
 
+        #region Fourth
+        //public async Task<string> GetSecurityBlogAsync(string originContent)
+        //{
+        //    if (string.IsNullOrWhiteSpace(originContent)) return originContent;
+        //    _effectiveSensitiveNum = 0;
+
+        //    StringBuilder sbOriginContent = new StringBuilder(originContent);
+        //    foreach (var item in _sensitiveList)
+        //    {
+        //        var filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "SensitiveWords", item);
+        //        if (await _fileManager.IsExistsFileAsync(filePath))
+        //        {
+        //            var words = await _fileManager.GetStringFromTxtAsync(filePath);
+        //            var wordList = words.Split("\r\n");
+        //            if (wordList.Any())
+        //            {
+        //                _effectiveSensitiveNum++;
+        //                foreach (var word in wordList)
+        //                {
+        //                    sbOriginContent.Replace(word, string.Join("", word.Select(s => "*")));
+        //                }
+        //            }
+        //        }
+        //    }
+
+        //    if (originContent != sbOriginContent.ToString())
+        //    {
+        //        _loggerService.LogError($"【{originContent}】含有敏感字符", null);
+        //    }
+
+        //    return await Task.FromResult(sbOriginContent.ToString());
+        //} 
+        #endregion
+
         public async Task<string> GetSecurityBlogAsync(string originContent)
         {
             if (string.IsNullOrWhiteSpace(originContent)) return originContent;
@@ -167,7 +203,14 @@ namespace XUnitDemo.Service
 
             if (originContent != sbOriginContent.ToString())
             {
-                _loggerService.LogError($"【{originContent}】含有敏感字符", null);
+                try
+                {
+                    _loggerService.LogError($"【{originContent}】含有敏感字符", null);
+                }
+                catch (Exception ex)
+                {
+                    await _emailService.SendEmailAsync("Harley", "System", "LoggerService抛出异常", ex.Message);
+                }
             }
 
             return await Task.FromResult(sbOriginContent.ToString());
