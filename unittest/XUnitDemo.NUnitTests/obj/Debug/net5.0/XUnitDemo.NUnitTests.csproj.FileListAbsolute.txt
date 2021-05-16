@@ -305,3 +305,5 @@ E:\BlogPlan\XUnitDemo\unittest\XUnitDemo.NUnitTests\obj\Debug\net5.0\ref\XUnitDe
 E:\BlogPlan\XUnitDemo\unittest\XUnitDemo.NUnitTests\obj\Debug\net5.0\XUnitDemo.NUnitTests.pdb
 E:\BlogPlan\XUnitDemo\unittest\XUnitDemo.NUnitTests\obj\Debug\net5.0\XUnitDemo.NUnitTests.genruntimeconfig.cache
 E:\BlogPlan\XUnitDemo\unittest\XUnitDemo.NUnitTests\bin\Debug\net5.0\Microsoft.Extensions.Logging.Abstractions.dll
+E:\BlogPlan\XUnitDemo\unittest\XUnitDemo.NUnitTests\bin\Debug\net5.0\Castle.Core.dll
+E:\BlogPlan\XUnitDemo\unittest\XUnitDemo.NUnitTests\bin\Debug\net5.0\Moq.dll
