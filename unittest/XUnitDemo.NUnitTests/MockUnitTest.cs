@@ -1,6 +1,8 @@
 ﻿using Moq;
 using NUnit.Framework;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace XUnitDemo.NUnitTests
 {
@@ -159,6 +161,57 @@ namespace XUnitDemo.NUnitTests
             Assert.Pass();
         }
 
+        [Category("*2、Mock的Setup用法*")]
+        [Test]
+        public void GetProductList_WithProductTypePriceInRange_ReturnProductList()
+        {
+            var mockProductService = new Mock<IProductService>();
+            var item = new ProductModel()
+            {
+                ProductId = Guid.NewGuid(),
+                ProductName = "演进式架构",
+                ProductPrice = 59
+            };
+            mockProductService.Setup(s => s.GetProductList(It.Is<string>(a => a == "Book"), It.IsInRange<double>(20, 60, Moq.Range.Inclusive)))
+                .Returns(new List<ProductModel> { item });
+
+            var productService = mockProductService.Object;
+            var result = productService.GetProductList("Book", 59);
+            var result1 = productService.GetProductList("Books", 59);
+            var result2 = productService.GetProductList("Book", 5);
+            Assert.Multiple(() =>
+            {
+                CollectionAssert.AreEqual(new List<ProductModel>() { item }, result);
+                CollectionAssert.AreEqual(new List<ProductModel>() { item }, result1, "param:bookType=Books,price=59返回的result1与预期的不相符");
+                CollectionAssert.AreEqual(new List<ProductModel>() { item }, result2, "param:bookType=Book,price=5返回的result2与预期的不相符");
+            });
+        }
+
+        [Category("*2、Mock的Setup用法*")]
+        [Test]
+        public void GetProductList_WithProductTypeRegexPriceIsAny_ReturnProductList()
+        {
+            var mockProductService = new Mock<IProductService>();
+            var item = new ProductModel()
+            {
+                ProductId = Guid.NewGuid(),
+                ProductName = "演进式架构",
+                ProductPrice = 59
+            };
+            mockProductService.Setup(s => s.GetProductList(It.IsRegex("^[1-9a-z_]{1,10}$", System.Text.RegularExpressions.RegexOptions.IgnoreCase), It.IsAny<double>()))
+                .Returns(new List<ProductModel> { item });
+
+            var productService = mockProductService.Object;
+            var result = productService.GetProductList("Book_123", 59);
+            var result1 = productService.GetProductList("BookBookBookBookBook", 123);
+            var result2 = productService.GetProductList("书籍", 5);
+            Assert.Multiple(() =>
+            {
+                CollectionAssert.AreEqual(new List<ProductModel>() { item }, result);
+                CollectionAssert.AreEqual(new List<ProductModel>() { item }, result1, "param:bookType=BookBookBookBookBook,price=123返回的result1与预期的不相符");
+                CollectionAssert.AreEqual(new List<ProductModel>() { item }, result2, "param:bookType=书籍,price=5返回的result2与预期的不相符");
+            });
+        }
         #endregion
 
         #region 3、Mock的DefaultValueProvider用法
@@ -207,6 +260,7 @@ namespace XUnitDemo.NUnitTests
         public bool AddProduct(string name);
         public bool DeleteProduct(Guid id);
         public string GetProudctName(Guid id);
+        public IEnumerable<ProductModel> GetProductList(string productType, double price);
     }
 
     public abstract class AbstractProductService : IProductService
@@ -216,6 +270,17 @@ namespace XUnitDemo.NUnitTests
         public virtual bool DeleteProduct(Guid id)
         {
             return true;
+        }
+
+        public IEnumerable<ProductModel> GetProductList(string productType, double price)
+        {
+            return new List<ProductModel> {
+                new ProductModel(){
+                        ProductId=Guid.NewGuid(),
+                        ProductName="演进式架构",
+                        ProductPrice=59
+                 }
+            };
         }
 
         public virtual string GetProudctName(Guid id)
@@ -230,6 +295,13 @@ namespace XUnitDemo.NUnitTests
         {
             return DateTime.Now.Hour > 10;
         }
+    }
+
+    public class ProductModel
+    {
+        public Guid ProductId { get; set; }
+        public string ProductName { get; set; }
+        public double ProductPrice { get; set; }
     }
     #endregion
 
