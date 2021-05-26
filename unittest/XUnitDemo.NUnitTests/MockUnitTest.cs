@@ -212,6 +212,22 @@ namespace XUnitDemo.NUnitTests
                 CollectionAssert.AreEqual(new List<ProductModel>() { item }, result2, "param:bookType=书籍,price=5返回的result2与预期的不相符");
             });
         }
+
+        [Category("*2、Mock的Setup用法*")]
+        [Test]
+        public void Repaire_WithIdIsAny_TriggerMyHandlerEvent()
+        {
+            var mockProductService = new Mock<IProductService>();
+            var id = Guid.NewGuid();
+            mockProductService.Setup(s => s.Repaire(It.IsAny<Guid>())).Raises<Guid>((s) =>
+            {
+                s.MyHandlerEvent += null;//这个注册的委托不会被调用，实际上是触发ProductServiceHandler中的Invoke委托
+            }, s => new MyEventArgs(id));
+
+            var myHandler = new ProductServiceHandler(mockProductService.Object);
+            System.Diagnostics.Debug.WriteLine($"This is {nameof(Repaire_WithIdIsAny_TriggerMyHandlerEvent)} Id={id}");
+            mockProductService.Object.Repaire(id);
+        }
         #endregion
 
         #region 3、Mock的DefaultValueProvider用法
@@ -261,10 +277,14 @@ namespace XUnitDemo.NUnitTests
         public bool DeleteProduct(Guid id);
         public string GetProudctName(Guid id);
         public IEnumerable<ProductModel> GetProductList(string productType, double price);
+        public event EventHandler MyHandlerEvent;
+        public void Repaire(Guid id);
     }
 
     public abstract class AbstractProductService : IProductService
     {
+        public event EventHandler MyHandlerEvent;
+
         public abstract bool AddProduct(string name);
 
         public virtual bool DeleteProduct(Guid id)
@@ -287,6 +307,11 @@ namespace XUnitDemo.NUnitTests
         {
             return "演进式架构";
         }
+
+        public void Repaire(Guid id)
+        {
+
+        }
     }
 
     public class ProductService : AbstractProductService
@@ -302,6 +327,29 @@ namespace XUnitDemo.NUnitTests
         public Guid ProductId { get; set; }
         public string ProductName { get; set; }
         public double ProductPrice { get; set; }
+    }
+
+    public class MyEventArgs : EventArgs {
+        public Guid Id { get; set; }
+        public MyEventArgs(Guid id)
+        {
+            Id = id;
+        }
+    }
+
+    public class ProductServiceHandler
+    {
+        private IProductService _productService;
+        public ProductServiceHandler(IProductService productService)
+        {
+            _productService = productService;
+            _productService.MyHandlerEvent += Invoke;
+        }
+
+        public void Invoke(object sender, EventArgs args)
+        {
+            System.Diagnostics.Debug.WriteLine($"This is {nameof(ProductServiceHandler)} {nameof(Invoke)} Id={((MyEventArgs)args).Id}");
+        }
     }
     #endregion
 
