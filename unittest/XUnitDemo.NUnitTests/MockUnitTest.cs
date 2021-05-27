@@ -228,6 +228,49 @@ namespace XUnitDemo.NUnitTests
             System.Diagnostics.Debug.WriteLine($"This is {nameof(Repaire_WithIdIsAny_TriggerMyHandlerEvent)} Id={id}");
             mockProductService.Object.Repaire(id);
         }
+
+        [Category("*2、Mock的Setup用法*")]
+        [Test]
+        public void GetProductList_WithProductTypePrice_VerifyTwice()
+        {
+            var mockProductService = new Mock<IProductService>();
+            mockProductService.Setup(s => s.GetProductList(It.IsAny<string>(), It.IsAny<double>()))
+                .Returns(new List<ProductModel>())
+                .Verifiable();
+            var result = mockProductService.Object.GetProductList("Book", 59);
+            result = mockProductService.Object.GetProductList("Books", 5);
+
+            mockProductService.Verify(s => s.GetProductList(It.IsAny<string>(), It.IsAny<double>()), Times.AtLeast(2), "GetProductList 没有按照预期执行2次");
+        }
+
+        [Category("*2、Mock的Setup用法*")]
+        [Test]
+        public void GetProductList_WithProductTypePrice_MockVerify()
+        {
+            var mockProductService = new Mock<IProductService>();
+            mockProductService.Setup(s => s.GetProductList(It.IsAny<string>(), It.IsAny<double>()))
+                .Returns(new List<ProductModel>())
+                .Verifiable("GetProductList没有按照预期执行一次");
+            var result = mockProductService.Object.GetProductList("Book", 59);
+            Mock.Verify(mockProductService);
+        }
+
+        [Category("*2、Mock的Setup用法*")]
+        [Test]
+        public void GetProductList_WithProductTypePrice_MockVerifyAll()
+        {
+            var mockProductService = new Mock<IProductService>();
+            mockProductService.Setup(s => s.GetProductList(It.IsAny<string>(), It.IsAny<double>()))
+                .Returns(new List<ProductModel>());
+
+            var mockAbstractProductService = new Mock<AbstractProductService>();
+            mockAbstractProductService.Setup(s => s.GetProductList(It.IsAny<string>(), It.IsAny<double>()))
+                .Returns(new List<ProductModel>());
+
+            mockProductService.Object.GetProductList("Book", 59);
+            mockAbstractProductService.Object.GetProductList("Book", 59);
+            Mock.VerifyAll(mockProductService, mockAbstractProductService);
+        }
         #endregion
 
         #region 3、Mock的DefaultValueProvider用法
@@ -292,7 +335,7 @@ namespace XUnitDemo.NUnitTests
             return true;
         }
 
-        public IEnumerable<ProductModel> GetProductList(string productType, double price)
+        public virtual IEnumerable<ProductModel> GetProductList(string productType, double price)
         {
             return new List<ProductModel> {
                 new ProductModel(){
@@ -329,7 +372,8 @@ namespace XUnitDemo.NUnitTests
         public double ProductPrice { get; set; }
     }
 
-    public class MyEventArgs : EventArgs {
+    public class MyEventArgs : EventArgs
+    {
         public Guid Id { get; set; }
         public MyEventArgs(Guid id)
         {
