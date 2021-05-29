@@ -273,8 +273,104 @@ namespace XUnitDemo.NUnitTests
         }
         #endregion
 
-        #region 3、Mock的DefaultValueProvider用法
+        #region 3、Mock的CallBase用法
+        [Category("*3、Mock的CallBase用法*")]
+        [Test]
+        public void GetProductName_WithIProductServiceAnyGuidCallBaseIsTrue_ReturnEmpty()
+        {
+            var mockProductService = new Mock<IProductService>() { CallBase = true };
+            mockProductService.Setup(s => s.GetProudctName(It.IsAny<Guid>())).Returns(string.Empty);
+            var result = mockProductService.Object.GetProudctName(Guid.NewGuid());
+            Assert.AreEqual(string.Empty, result);
+        }
 
+        [Category("*3、Mock的CallBase用法*")]
+        [Test]
+        public void GetProductName_WithAbstractProductServiceAnyGuidCallBaseIsTrue_ReturnBaseResult()
+        {
+            var mockProductService = new Mock<AbstractProductService>() { };
+            mockProductService.Setup(s => s.GetProudctName(It.IsAny<Guid>()));
+            var result = mockProductService.Object.GetProudctName(Guid.NewGuid());
+            Assert.AreEqual("演进式架构", result);
+        }
+
+        [Category("*3、Mock的CallBase用法*")]
+        [Test]
+        public void ToCurrentString_WithProductServiceCallBaseIsTrue_ReturnBaseResult()
+        {
+            var mockProductService = new Mock<ProductService>();
+            //mockProductService.Setup(s => s.ToCurrentString()).Returns(string.Empty);
+            var result = mockProductService.Object.ToCurrentString();
+            Assert.AreEqual("ProductService_ToString", result);
+        }
+
+        #endregion
+
+        #region 4、Mock的DefaultValue用法
+        [Category("*4、Mock的DefaultValue用法*")]
+        [Test]
+        public void MockDefaultValue_WithDefaultValueMock_ReturnExpect()
+        {
+            var mockRolePermissionService = new Mock<IRolePermissionService>() { DefaultValue = DefaultValue.Mock };
+            var roleRepos = mockRolePermissionService.Object.RoleRepository;
+            var permissionRepos = mockRolePermissionService.Object.PermissionRepository;
+            Assert.Multiple(() =>
+            {
+                Assert.NotNull(roleRepos);
+                Assert.NotNull(permissionRepos);
+                Assert.NotNull(roleRepos.DbContext);
+                Assert.NotNull(permissionRepos.DbContext);
+            });
+        }
+
+        [Category("*4、Mock的DefaultValue用法*")]
+        [Test]
+        public void GetRoleName_WidthRolePermissionServiceDefaultValueMock_ReturnExpect()
+        {
+            var mockRolePermissionService = new Mock<IRolePermissionService>() { DefaultValue = DefaultValue.Mock };
+            var roleRepos = mockRolePermissionService.Object.RoleRepository;
+            var mockRoleRepos = Mock.Get(roleRepos);
+            mockRoleRepos.Setup(s => s.GetRoleName(It.IsAny<Guid>())).Returns("Admin");
+            var result = mockRolePermissionService.Object.RoleRepository.GetRoleName(Guid.NewGuid());
+
+            Assert.AreEqual("Admin", result);
+        }
+        #endregion
+
+        #region 5、SetupProperty与SetupAllProperties的用法
+        [Category("*5、SetupProperty与SetupAllProperties的用法*")]
+        [Test]
+        public void CheckProperty_WithSetupProperty_ShouldPass()
+        {
+            var mockCar = new Mock<ICar>();
+            mockCar.SetupProperty(s => s.CarBrand).SetupProperty(s => s.CarModel);
+            mockCar.SetupProperty(s => s.CarBrand, "一汽大众")
+                .SetupProperty(s => s.CarModel, "七座SUV");
+
+            mockCar.Object.CarBrand = "上汽大众";
+            mockCar.Object.CarModel = "五座SUV";
+            Assert.Multiple(() =>
+            {
+                Assert.AreEqual("七座SUV", mockCar.Object.CarModel);
+                Assert.AreEqual("一汽大众", mockCar.Object.CarBrand);
+            });
+        }
+
+        [Category("*5、SetupProperty与SetupAllProperties的用法*")]
+        [Test]
+        public void CheckProperty_WithSetupAllProperties_ShouldPass()
+        {
+            var mockCar = new Mock<ICar>();
+            mockCar.SetupAllProperties();
+
+            mockCar.Object.CarBrand = "上汽大众";
+            mockCar.Object.CarModel = "五座SUV";
+            Assert.Multiple(() =>
+            {
+                Assert.AreEqual("七座SUV", mockCar.Object.CarModel);
+                Assert.AreEqual("一汽大众", mockCar.Object.CarBrand);
+            });
+        }
         #endregion
     }
 
@@ -363,6 +459,16 @@ namespace XUnitDemo.NUnitTests
         {
             return DateTime.Now.Hour > 10;
         }
+
+        public override string GetProudctName(Guid id)
+        {
+            return base.GetProudctName(id);
+        }
+
+        public string ToCurrentString()
+        {
+            return $"{ nameof(ProductService)}_{nameof(ToString)}";
+        }
     }
 
     public class ProductModel
@@ -397,7 +503,57 @@ namespace XUnitDemo.NUnitTests
     }
     #endregion
 
-    #region 3、Mock的DefaultValueProvider用法
+    #region 4、Mock的DefaultValue属性
+    public interface IRolePermissionService
+    {
+        public IRoleRepository RoleRepository { get; set; }
+        public IPermissionRepository PermissionRepository { get; set; }
+        public IEnumerable<string> GetPermissionList(Guid roleId);
+    }
+    public interface IRoleRepository
+    {
+        public IDbContext DbContext { get; set; }
+        public string GetRoleName(Guid roleId);
+    }
 
+    public interface IPermissionRepository
+    {
+        public IDbContext DbContext { get; set; }
+        public string GetPermissionName(Guid permissionId);
+    }
+
+    public interface IDbContext
+    {
+
+    }
+    #endregion
+
+    #region 5、SetupProperty与SetupAllProperties的用法
+    public interface ICar
+    {
+        public IEnumerable<IWheel> Wheels { get; set; }
+        public string CarBrand { get; set; }
+        public string CarModel { get; set; }
+    }
+    public interface IWheel
+    {
+        public string WheelHub { get; set; }
+        public string WheelTyre { get; set; }
+        public string WheelTyreTube { get; set; }
+    }
+
+    public class Car : ICar
+    {
+        public IEnumerable<IWheel> Wheels { get; set; }
+        public string CarBrand { get; set; }
+        public string CarModel { get; set; }
+    }
+
+    public class CarWheel : IWheel
+    {
+        public string WheelHub { get; set; }
+        public string WheelTyre { get; set; }
+        public string WheelTyreTube { get; set; }
+    }
     #endregion
 }
