@@ -3,6 +3,7 @@ using NUnit.Framework;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace XUnitDemo.NUnitTests
 {
@@ -372,6 +373,74 @@ namespace XUnitDemo.NUnitTests
             });
         }
         #endregion
+
+        #region 6、Mock的As用法
+        [Category("*6、Mock的As用法*")]
+        [Test]
+        public void MockAs_WithMultipleInterface_ShouldPass()
+        {
+            var mockComputer = new Mock<IComputer>();
+
+            var mockKeyBoard = mockComputer.As<IKeyboard>();
+            var mockScreen = mockComputer.As<IScreen>();
+            var mockCpu = mockComputer.As<ICpu>();
+            mockKeyBoard.Setup(s => s.GetKeyboardType()).Returns("机械键盘");
+            mockScreen.Setup(s => s.GetScreenType()).Returns("OLED");
+            mockCpu.Setup(s => s.GetCpuType()).Returns("Intel-11代I7");
+            var keyboardType = ((dynamic)mockComputer.Object).GetKeyboardType();
+            var screenType = ((dynamic)mockComputer.Object).GetScreenType();
+            var cpuType = ((dynamic)mockComputer.Object).GetCpuType();
+
+            Assert.Multiple(() =>
+            {
+                Assert.AreEqual("机械键盘", keyboardType);
+                Assert.AreEqual("OLED", screenType);
+                Assert.AreEqual("Intel-11代I7", cpuType);
+            });
+        }
+
+        [Category("*6、Mock的As用法*")]
+        [Test]
+        public void MockAs_WithMultipleInterfaceAndInvokePropertyBeforeAs_ShouldPass()
+        {
+            var mockComputer = new Mock<IComputer>();
+            mockComputer.Setup(s => s.ComputerType).Returns("台式机");
+            var computerType = mockComputer.Object.ComputerType;
+
+            var mockKeyBoard = mockComputer.As<IKeyboard>();
+            var mockScreen = mockComputer.As<IScreen>();
+            var mockCpu = mockComputer.As<ICpu>();
+            mockKeyBoard.Setup(s => s.GetKeyboardType()).Returns("机械键盘");
+            mockScreen.Setup(s => s.GetScreenType()).Returns("OLED");
+            mockCpu.Setup(s => s.GetCpuType()).Returns("Intel-11代I7");
+            var keyboardType = ((dynamic)mockComputer.Object).GetKeyboardType();
+            var screenType = ((dynamic)mockComputer.Object).GetScreenType();
+            var cpuType = ((dynamic)mockComputer.Object).GetCpuType();
+
+            Assert.Multiple(() =>
+            {
+                Assert.AreEqual("台式机", computerType);
+                Assert.AreEqual("机械键盘", keyboardType);
+                Assert.AreEqual("OLED", screenType);
+                Assert.AreEqual("Intel-11代I7", cpuType);
+            });
+        }
+
+        #endregion
+
+        #region 7、Mock的异步方法设置
+        [Category("*7、Mock的异步方法设置*")]
+        [Test]
+        public async Task AddProductAsync_WithName_ReturnTrue()
+        {
+            var mockProductService = new Mock<IProductService>();
+            mockProductService.Setup(s => s.AddProductAsync(It.IsAny<string>()).Result).Returns(true);
+            mockProductService.Setup(s => s.AddProductAsync(It.IsAny<string>())).ReturnsAsync(true);
+
+            var result = await mockProductService.Object.AddProductAsync("演进式架构");
+            Assert.AreEqual(true, result);
+        }
+        #endregion
     }
 
     #region 1、泛型类Mock的构造函数
@@ -413,6 +482,7 @@ namespace XUnitDemo.NUnitTests
     public interface IProductService
     {
         public bool AddProduct(string name);
+        public Task<bool> AddProductAsync(string name);
         public bool DeleteProduct(Guid id);
         public string GetProudctName(Guid id);
         public IEnumerable<ProductModel> GetProductList(string productType, double price);
@@ -425,6 +495,11 @@ namespace XUnitDemo.NUnitTests
         public event EventHandler MyHandlerEvent;
 
         public abstract bool AddProduct(string name);
+
+        public async Task<bool> AddProductAsync(string name)
+        {
+            return await Task.FromResult(true);
+        }
 
         public virtual bool DeleteProduct(Guid id)
         {
@@ -556,4 +631,33 @@ namespace XUnitDemo.NUnitTests
         public string WheelTyreTube { get; set; }
     }
     #endregion
+
+    #region 6、Mock的As用法
+    public interface IComputer
+    {
+        public string ComputerType { get; set; }
+    }
+
+    public interface IScreen
+    {
+        public string GetScreenType();
+    }
+
+    public interface IMainBoard
+    {
+        public ICpu GetCpu();
+    }
+
+    public interface IKeyboard
+    {
+        public string GetKeyboardType();
+    }
+
+    public interface ICpu
+    {
+        public string GetCpuType();
+    }
+    #endregion
+
+
 }
