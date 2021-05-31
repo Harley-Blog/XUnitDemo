@@ -435,10 +435,72 @@ namespace XUnitDemo.NUnitTests
         {
             var mockProductService = new Mock<IProductService>();
             mockProductService.Setup(s => s.AddProductAsync(It.IsAny<string>()).Result).Returns(true);
-            mockProductService.Setup(s => s.AddProductAsync(It.IsAny<string>())).ReturnsAsync(true);
+            //mockProductService.Setup(s => s.AddProductAsync(It.IsAny<string>())).ReturnsAsync(true);
 
             var result = await mockProductService.Object.AddProductAsync("演进式架构");
             Assert.AreEqual(true, result);
+        }
+        #endregion
+
+        #region 7、Mock的Sequence用法
+        [Category("*8、Mock的Sequence用法*")]
+        [Test]
+        public void GetProductName_WithId_ReturnDifferenctValueInMultipleInvoke()
+        {
+            var mockProductService = new Mock<IProductService>();
+            mockProductService.SetupSequence(s => s.GetProudctName(It.IsAny<Guid>()))
+                .Returns("渐进式架构")
+                .Returns("Vue3实战")
+                .Returns("Docker实战")
+                .Returns("微服务架构设计模式");
+
+            var result = mockProductService.Object.GetProudctName(Guid.Empty);
+            var result1 = mockProductService.Object.GetProudctName(Guid.Empty);
+            var result2 = mockProductService.Object.GetProudctName(Guid.Empty);
+            var result3 = mockProductService.Object.GetProudctName(Guid.Empty);
+            Assert.Multiple(() =>
+            {
+                Assert.AreEqual("渐进式架构", result);
+                Assert.AreEqual("Vue3实战", result1);
+                Assert.AreEqual("Docker实战", result2);
+                Assert.AreEqual("微服务架构设计模式", result3);
+            });
+        }
+
+        [Category("*8、Mock的Sequence用法*")]
+        [Test]
+        public void InSequence_WithMultipleNonSequenceInvoke_ThrowException()
+        {
+            var mockProductService = new Mock<IProductService>(MockBehavior.Strict);
+            var sequence = new MockSequence();
+            mockProductService.InSequence(sequence)
+                .Setup(s => s.AddProductAsync(It.IsAny<string>())).ReturnsAsync(true);
+            mockProductService.InSequence(sequence)
+                .Setup(s => s.GetProudctName(It.IsAny<Guid>())).Returns("渐进式架构");
+            mockProductService.InSequence(sequence)
+                .Setup(s => s.DeleteProduct(It.IsAny<Guid>())).Returns(true);
+
+            mockProductService.Object.AddProductAsync("渐进式架构");
+            mockProductService.Object.DeleteProduct(Guid.Empty);
+            mockProductService.Object.GetProudctName(Guid.Empty);
+        }
+
+        [Category("*8、Mock的Sequence用法*")]
+        [Test]
+        public void InSequence_WithMultipleInSequenceInvoke_WillPass()
+        {
+            var mockProductService = new Mock<IProductService>(MockBehavior.Strict);
+            var sequence = new MockSequence();
+            mockProductService.InSequence(sequence)
+                .Setup(s => s.AddProductAsync(It.IsAny<string>())).ReturnsAsync(true);
+            mockProductService.InSequence(sequence)
+                .Setup(s => s.GetProudctName(It.IsAny<Guid>())).Returns("渐进式架构");
+            mockProductService.InSequence(sequence)
+                .Setup(s => s.DeleteProduct(It.IsAny<Guid>())).Returns(true);
+
+            mockProductService.Object.AddProductAsync("渐进式架构");
+            mockProductService.Object.GetProudctName(Guid.Empty);
+            mockProductService.Object.DeleteProduct(Guid.Empty);
         }
         #endregion
     }
