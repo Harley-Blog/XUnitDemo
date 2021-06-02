@@ -1,8 +1,10 @@
 ﻿using Moq;
+using Moq.Protected;
 using NUnit.Framework;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace XUnitDemo.NUnitTests
@@ -442,7 +444,7 @@ namespace XUnitDemo.NUnitTests
         }
         #endregion
 
-        #region 7、Mock的Sequence用法
+        #region 8、Mock的Sequence用法
         [Category("*8、Mock的Sequence用法*")]
         [Test]
         public void GetProductName_WithId_ReturnDifferenctValueInMultipleInvoke()
@@ -501,6 +503,27 @@ namespace XUnitDemo.NUnitTests
             mockProductService.Object.AddProductAsync("渐进式架构");
             mockProductService.Object.GetProudctName(Guid.Empty);
             mockProductService.Object.DeleteProduct(Guid.Empty);
+        }
+        #endregion
+
+        #region 9、Mock的Protected用法
+
+        [Category("*9、Mock的Protected用法*")]
+        [Test]
+        public void Calculate_WithProtectedMembers_CanAccessProtectedMembers()
+        {
+            var mockCalculator = new Mock<Calculator>(12, 10, 100, 5);
+            mockCalculator.Protected().Setup<double>("GetPercent").Returns(0.5);
+            mockCalculator.Protected().Setup<double>("GetSalt",ItExpr.IsAny<double>()).Returns(0.9);
+
+            var obj = mockCalculator.Object;
+            var sum = obj.Sum();
+            var division = obj.Division();
+
+            Assert.Multiple(()=> {
+                Assert.AreEqual(22 * 0.5 *0.9, sum);
+                Assert.AreEqual(100 * 0.5 * 0.9 / 5, division);
+            });
         }
         #endregion
     }
@@ -721,5 +744,38 @@ namespace XUnitDemo.NUnitTests
     }
     #endregion
 
+    #region 9、Mock的Protected用法
 
+    public class Calculator
+    {
+        public Calculator(int first, int second, double number, double divisor)
+        {
+            First = first;
+            Second = second;
+            Number = number;
+            Divisor = divisor;
+        }
+        protected int First { get; set; }
+        protected int Second { get; set; }
+        protected double Number { get; set; }
+        protected double Divisor { get; set; }
+        public double Sum()
+        {
+            return (First + Second) * GetPercent() * GetSalt(0.9);
+        }
+        public double Division()
+        {
+            return Number * GetPercent() * GetSalt(0.9) / Divisor;
+        }
+
+        protected virtual double GetPercent()
+        {
+            return 0.9;
+        }
+        protected virtual double GetSalt(double salt)
+        {
+            return salt;
+        }
+    }
+    #endregion
 }
