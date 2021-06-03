@@ -1,4 +1,6 @@
-﻿using Moq;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Moq;
 using Moq.Protected;
 using NUnit.Framework;
 using System;
@@ -6,6 +8,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace XUnitDemo.NUnitTests
 {
@@ -514,15 +517,61 @@ namespace XUnitDemo.NUnitTests
         {
             var mockCalculator = new Mock<Calculator>(12, 10, 100, 5);
             mockCalculator.Protected().Setup<double>("GetPercent").Returns(0.5);
-            mockCalculator.Protected().Setup<double>("GetSalt",ItExpr.IsAny<double>()).Returns(0.9);
+            mockCalculator.Protected().Setup<double>("GetSalt", ItExpr.IsAny<double>()).Returns(0.9);
 
             var obj = mockCalculator.Object;
             var sum = obj.Sum();
             var division = obj.Division();
 
-            Assert.Multiple(()=> {
-                Assert.AreEqual(22 * 0.5 *0.9, sum);
+            Assert.Multiple(() =>
+            {
+                Assert.AreEqual(22 * 0.5 * 0.9, sum);
                 Assert.AreEqual(100 * 0.5 * 0.9 / 5, division);
+            });
+        }
+
+        [Category("*9、Mock的Protected用法*")]
+        [Test]
+        public void Calculate_WithProtectedMembersUnRelatedInterface_CanAccessProtectedMembers()
+        {
+            var mockCalculator = new Mock<Calculator>(12, 10, 100, 5);
+            var caculatorProtectedMembers = mockCalculator.Protected().As<ICaculatorProtectedMembers>();
+            caculatorProtectedMembers.Setup(s => s.GetPercent()).Returns(0.6);
+            caculatorProtectedMembers.Setup(s => s.GetSalt(It.IsAny<double>())).Returns(0.8);
+
+            var obj = mockCalculator.Object;
+            var sum = obj.Sum();
+            var division = obj.Division();
+
+            Assert.Multiple(() =>
+            {
+                Assert.AreEqual(22 * 0.6 * 0.8, sum);
+                Assert.AreEqual(100 * 0.6 * 0.8 / 5, division);
+            });
+        }
+        #endregion
+
+        #region 10、Mock的Of用法
+        [Category("*10、Mock的Of用法*")]
+        [Test]
+        public void MockOf_WithLinq_QuickSetup()
+        {
+            var context = Mock.Of<HttpContext>(hc =>
+              hc.User.Identity.IsAuthenticated == true &&
+              hc.User.Identity.Name == "harley" &&
+              hc.Response.ContentType == "application/json" &&
+              hc.RequestServices == Mock.Of<IServiceProvider>
+              (a => a.GetService(typeof(ICaculatorProtectedMembers)) == Mock.Of<ICaculatorProtectedMembers>
+             (p => p.GetPercent() == 0.2 && p.GetSalt(It.IsAny<double>()) == 0.3)));
+
+            Assert.Multiple(() =>
+            {
+                Assert.AreEqual(true, context.User.Identity.IsAuthenticated);
+                Assert.AreEqual("harley", context.User.Identity.Name);
+                Assert.AreEqual("application/json", context.Response.ContentType);
+                Assert.AreEqual(0.2,context.RequestServices.GetService<ICaculatorProtectedMembers>().GetPercent());
+                Assert.AreEqual(0.3, context.RequestServices.GetService<ICaculatorProtectedMembers>().GetSalt(1));
+                ;
             });
         }
         #endregion
@@ -777,5 +826,15 @@ namespace XUnitDemo.NUnitTests
             return salt;
         }
     }
+
+    public interface ICaculatorProtectedMembers
+    {
+        double GetPercent();
+        double GetSalt(double salt);
+    }
+    #endregion
+
+    #region MyRegion
+
     #endregion
 }
