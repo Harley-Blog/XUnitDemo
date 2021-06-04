@@ -569,9 +569,44 @@ namespace XUnitDemo.NUnitTests
                 Assert.AreEqual(true, context.User.Identity.IsAuthenticated);
                 Assert.AreEqual("harley", context.User.Identity.Name);
                 Assert.AreEqual("application/json", context.Response.ContentType);
-                Assert.AreEqual(0.2,context.RequestServices.GetService<ICaculatorProtectedMembers>().GetPercent());
+                Assert.AreEqual(0.2, context.RequestServices.GetService<ICaculatorProtectedMembers>().GetPercent());
                 Assert.AreEqual(0.3, context.RequestServices.GetService<ICaculatorProtectedMembers>().GetSalt(1));
                 ;
+            });
+        }
+        #endregion
+
+        #region 11、Mock泛型参数进行匹配
+        [Category("*10、Mock的Of用法*")]
+        [Test]
+        public void SaveJsonToString_TObject_ReturnTrue()
+        {
+            var mockRedisService = new Mock<IRedisService>();
+            mockRedisService.Setup(s => s.SaveJsonToString(It.IsAny<It.IsAnyType>()))
+                .Returns(true);
+            var kv = new KeyValuePair<string, string>("Harley", "Coder");
+            Assert.Multiple(() =>
+            {
+                Assert.AreEqual(true, mockRedisService.Object.SaveJsonToString(kv));
+                Assert.AreEqual(true, mockRedisService.Object.SaveJsonToString(new { Name = "Harley", JobType = "Coder" }));
+            });
+        }
+
+        [Category("*10、Mock的Of用法*")]
+        [Test]
+        public void SavePersonToString_WithMale_ReturnTrue()
+        {
+            var mockRedisService = new Mock<IRedisService>();
+            var male = new Male { Name = "Harley" };
+            mockRedisService.Setup(s => s.SavePersonToString(It.IsAny<It.IsSubtype<Person>>())).Returns(true);
+            var result1 = mockRedisService.Object.SavePersonToString(new { Name = "Harley", JobType = "Coder" });
+            var result2 = mockRedisService.Object.SavePersonToString(new Person { Name = "Harley" });
+            var result3 = mockRedisService.Object.SavePersonToString(new Male { Name = "Harley" });
+            Assert.Multiple(() =>
+            {
+                Assert.AreEqual(true, result1,"使用匿名类型生成的对象无法通过测试");
+                Assert.AreEqual(true, result2,"使用Person类型生成的对象无法通过测试");
+                Assert.AreEqual(true, result3, "使用Male类型生成的对象无法通过测试");
             });
         }
         #endregion
@@ -834,7 +869,20 @@ namespace XUnitDemo.NUnitTests
     }
     #endregion
 
-    #region MyRegion
+    #region 11、Mock的类型匹配
+    public interface IRedisService
+    {
+        public bool SaveJsonToString<T>(T TObject);
+        public bool SavePersonToString<T>(T TObject);
+    }
+    public class Person
+    {
+        public string Name { get; set; }
+    }
 
+    public class Male : Person
+    {
+
+    }
     #endregion
 }
