@@ -377,6 +377,24 @@ namespace XUnitDemo.NUnitTests
                 Assert.AreEqual("一汽大众", mockCar.Object.CarBrand);
             });
         }
+
+        [Category("*5、SetupProperty与SetupAllProperties的用法*")]
+        [Test]
+        public void CheckProperty_WithSetupSetVerifySet_ShouldPass()
+        {
+            var mockCar = new Mock<ICar>();
+            mockCar.SetupSet(s => s.CarBrand ="上汽大众");
+            mockCar.SetupSet(s => s.CarModel = "五座SUV");
+
+            mockCar.Object.CarBrand = "上汽大众";
+            mockCar.Object.CarModel = "五座SUV";
+            
+            //mockCar.Object.CarBrand = "一汽大众";
+            //mockCar.Object.CarModel = "七座SUV";
+
+            mockCar.VerifySet(s => s.CarBrand = "上汽大众"); ;
+            mockCar.VerifySet(s => s.CarModel = "五座SUV"); ;
+        }
         #endregion
 
         #region 6、Mock的As用法
