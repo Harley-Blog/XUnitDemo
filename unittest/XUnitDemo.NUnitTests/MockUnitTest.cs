@@ -383,12 +383,12 @@ namespace XUnitDemo.NUnitTests
         public void CheckProperty_WithSetupSetVerifySet_ShouldPass()
         {
             var mockCar = new Mock<ICar>();
-            mockCar.SetupSet(s => s.CarBrand ="上汽大众");
+            mockCar.SetupSet(s => s.CarBrand = "上汽大众");
             mockCar.SetupSet(s => s.CarModel = "五座SUV");
 
             mockCar.Object.CarBrand = "上汽大众";
             mockCar.Object.CarModel = "五座SUV";
-            
+
             //mockCar.Object.CarBrand = "一汽大众";
             //mockCar.Object.CarModel = "七座SUV";
 
@@ -622,10 +622,40 @@ namespace XUnitDemo.NUnitTests
             var result3 = mockRedisService.Object.SavePersonToString(new Male { Name = "Harley" });
             Assert.Multiple(() =>
             {
-                Assert.AreEqual(true, result1,"使用匿名类型生成的对象无法通过测试");
-                Assert.AreEqual(true, result2,"使用Person类型生成的对象无法通过测试");
+                Assert.AreEqual(true, result1, "使用匿名类型生成的对象无法通过测试");
+                Assert.AreEqual(true, result2, "使用Person类型生成的对象无法通过测试");
                 Assert.AreEqual(true, result3, "使用Male类型生成的对象无法通过测试");
             });
+        }
+        #endregion
+
+        #region 12、Mock的Events用法
+        [Category("*12、Mock的Events用法*")]
+        [Test]
+        public void MockRaise_WithIdIsAny_RaiseMyHandlerEvent()
+        {
+            var mockProductService = new Mock<IProductService>();
+            var id = Guid.NewGuid();
+            var myHandler = new ProductServiceHandler(mockProductService.Object);
+            System.Diagnostics.Debug.WriteLine($"This is {nameof(MockRaise_WithIdIsAny_RaiseMyHandlerEvent)} Id={id}");
+            mockProductService.Setup(s => s.Repaire(It.IsAny<Guid>())).Verifiable();
+            //这个注册的委托不会被调用，实际上是触发ProductServiceHandler中的Invoke委托
+            mockProductService.Raise(s => s.MyHandlerEvent += null, new MyEventArgs(id));
+            mockProductService.Object.Repaire(id);
+        }
+
+        [Category("*12、Mock的Events用法*")]
+        [Test]
+        public void MockSetupAddRemove_WithIdIsAny_RaiseMyHandlerEvent()
+        {
+            var mockProductService = new Mock<IProductService>();
+            var id = Guid.NewGuid();
+            mockProductService.SetupAdd(s => s.MyHandlerEvent += It.IsAny<EventHandler>()).Verifiable();
+            mockProductService.SetupRemove(s => s.MyHandlerEvent -= It.IsAny<EventHandler>()).Verifiable();
+
+            var myHandler = new ProductServiceHandler(mockProductService.Object);
+            mockProductService.VerifyAdd(s => s.MyHandlerEvent += It.IsAny<EventHandler>(), Times.Once);
+            mockProductService.VerifyRemove(s => s.MyHandlerEvent -= It.IsAny<EventHandler>(), Times.Never);
         }
         #endregion
     }
@@ -756,6 +786,7 @@ namespace XUnitDemo.NUnitTests
         {
             _productService = productService;
             _productService.MyHandlerEvent += Invoke;
+            _productService.MyHandlerEvent -= Invoke;
         }
 
         public void Invoke(object sender, EventArgs args)
